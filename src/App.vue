@@ -2,7 +2,6 @@
 <div>
 
   <Navbar/>
-  
   <div class="container-fluid">
 
     <div class="row">
@@ -10,7 +9,10 @@
       <div class="col-sm-2">
         <div class="panel  panel-default">
           <div class="panel-heading">
-            <button class="close" data-toggle="modal" data-target="#CreateTodo">&plus;</button>
+            <!-- <div>
+              <button class="close" data-toggle="modal" data-target="#CreateTodo">&plus;</button>
+            </div> -->
+            <CreateTodo/>
             Story Queue
           </div>
           <div class="panel-body">
@@ -170,7 +172,6 @@
     </div>
   </div>
 
-  <CreateTodo/>
 
 </div>
 
@@ -189,10 +190,8 @@ export default {
   },
   data () {
     return {
-      name: '',
       title: '',
-      detail: '',
-      assignto: ''
+      detail: ''
     }
   },
   firebase: {
@@ -200,61 +199,103 @@ export default {
   },
   methods: {
     removekanban(key){
-      Swal({
-        title: 'Are you sure?',
-        text: 'You will not be able to recover this todo!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, keep it'
-      }).then((result) => {
-        if (result.value) {
-          kanbansRef.child(key).remove()
-          Swal(
-            'Deleted!',
-            'Your todo has been deleted.',
-            'success'
-          )
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal(
-            'Cancelled',
-            'Your todo is safe :)',
-            'error'
-          )
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          Swal({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this todo!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+          }).then((result) => {
+            if (result.value) {
+              kanbansRef.child(key).remove()
+              Swal(
+                'Deleted!',
+                'Your todo has been deleted.',
+                'success'
+              )
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              Swal(
+                'Cancelled',
+                'Your todo is safe :)',
+                'error'
+              )
+            }
+          })
+        } else {
+          Swal('Oops...', 'You have not signed in yet', 'error')
         }
-      })
+      });
     },
     toSQ(key) {
-      kanbansRef.child(key).update({
-        status: 'sq'
-      })
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          kanbansRef.child(key).update({
+            status: 'sq'
+          })
+        } else {
+          Swal('Oops...', 'You have not signed in yet', 'error')
+        }
+      });
     },
     toEA(key) {
-      kanbansRef.child(key).update({
-        status: 'ea'
-      })
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          kanbansRef.child(key).update({
+            status: 'ea'
+          })
+        } else {
+          Swal('Oops...', 'You have not signed in yet', 'error')
+        }
+      });
     },
     toDP(key) {
-      kanbansRef.child(key).update({
-        status: 'dp'
-      })
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          kanbansRef.child(key).update({
+            status: 'dp'
+          })
+        } else {
+          Swal('Oops...', 'You have not signed in yet', 'error')
+        }
+      });
     },
     toTS(key) {
-      kanbansRef.child(key).update({
-        status: 'ts'
-      })
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          kanbansRef.child(key).update({
+            status: 'ts'
+          })
+        } else {
+          Swal('Oops...', 'You have not signed in yet', 'error')
+        }
+      });
     },
     toDY(key) {
-      kanbansRef.child(key).update({
-        status: 'dy'
-      })
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          kanbansRef.child(key).update({
+            status: 'dy'
+          })
+        } else {
+          Swal('Oops...', 'You have not signed in yet', 'error')
+        }
+      });
     },
     toDN(key) {
-      kanbansRef.child(key).update({
-        status: 'dn'
-      })
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          kanbansRef.child(key).update({
+            status: 'dn'
+          })
+        } else {
+          Swal('Oops...', 'You have not signed in yet', 'error')
+        }
+      });
     },
-  }
+  },
 }
 
 </script>

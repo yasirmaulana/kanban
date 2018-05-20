@@ -10,7 +10,7 @@
           <label>Title :</label>
           <input type="text" class="form-control" v-model="title">
           <label>Details :</label>
-          <textarea class="form-control" v-model="detail" rows="3" style="resize: none;"></textarea>
+          <textarea class="form-control" v-model="detail" rows="3"></textarea>
           <label>Assign To :</label>
           <input type="text" class="form-control" v-model="assignto">
         </div>
@@ -25,13 +25,14 @@
 
 <script>
 import { kanbansRef } from '@/firebase'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'CreateTodo',
   data () {
     return {
       title: '',
-      details: '',
+      detail: '',
       assignto: null
     }
   },
@@ -40,11 +41,22 @@ export default {
   },
   methods: {
     submitkanban(){
-      kanbansRef.push({
-        title: this.title,
-        detail: this.detail,
-        assignto: this.assignto,
-        status: 'sq'
+      let self = this
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          kanbansRef.push({
+            title: self.title,
+            detail: self.detail,
+            assignto: self.assignto,
+            status: 'sq'
+          })
+          self.title = ''
+          self.detail = ''
+          self.assignto = ''
+        } else {
+          Swal('Oops...', 'You have not signed in yet', 'error')
+          
+        }
       })
     }
   }
