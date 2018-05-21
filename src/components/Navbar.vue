@@ -39,7 +39,7 @@
         firebase.auth().signInWithPopup(provider).then(function(result) {
           const token = result.credential.accessToken;
           const user = result.user;
-          // localStorage.setItem('token', token)
+          localStorage.setItem('token', token)
           swal(
             'Good job!',
             'log in Success!',
@@ -70,6 +70,10 @@
         });
       },
     },
+    mounted () {
+      let self = this
+      this.stLogin = true
+    }
   }
 </script>
 
