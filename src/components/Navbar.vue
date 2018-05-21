@@ -6,13 +6,13 @@
       </div>
       <div class="col-sm-6" style="text-align:right">
         <ul>
-          <li v-if="this.stLogout == false">
+          <li v-if="stLogin == false">
             <button class="btn btn-danger navbar-btn" @click="login()">Login via Gmail</button>
           </li>
-          <li v-if="this.stLogout == true">
+          <li v-if="stLogin == true">
             <button class="btn btn-danger navbar-btn" data-toggle="modal" data-target="#CreateTodo">Create Todo</button>
           </li>
-          <li v-if="this.stLogout == true">
+          <li v-if="stLogin == true">
             <button class="btn btn-danger navbar-btn" @click="Logout()">Logout</button>
           </li>
         </ul>
@@ -28,11 +28,34 @@
     name: "Navbar",
     data () {
       return {
-        stLogout: false
+        stLogin: true,
       }
     },
     methods: {
+      login: function(){
+        const self = this
+        const provider = new firebase.auth.GoogleAuthProvider()
+
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          const token = result.credential.accessToken;
+          const user = result.user;
+          // localStorage.setItem('token', token)
+          swal(
+            'Good job!',
+            'log in Success!',
+            'success'
+          )
+          self.stLogin = true
+        }).catch(function(error) {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          const email = error.email;
+          const credential = error.credential;
+          console.log('gagal login dengan gamil', error)
+        });
+      },
       Logout() {
+        const self = this
         firebase.auth().signOut().then(function() {
           localStorage.removeItem('token')
           // console.log('Sign-out successful.')
@@ -41,39 +64,12 @@
             'log out seccess!',
             'success'
           )
-          // this.stLogout = false
+          self.stLogin = false
         }).catch(function(error) {
-          console.log('An error happened.')
+          console.log(error)
         });
       },
-      login: function(){
-        var provider = new firebase.auth.GoogleAuthProvider()
-
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-          var token = result.credential.accessToken;
-          var user = result.user;
-          localStorage.setItem('token', token)
-          swal(
-            'Good job!',
-            'log in Success!',
-            'success'
-          )
-          // this.stLogout = true
-        }).catch(function(error) {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          var email = error.email;
-          var credential = error.credential;
-          console.log('gagal login dengan gamil', error)
-        });
-      }
     },
-    mounted () {
-      let token = localStorage.getItem('token')
-      if (token) {
-        this.stLogout = true
-      } 
-    }
   }
 </script>
 
