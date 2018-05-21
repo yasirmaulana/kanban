@@ -52,6 +52,12 @@
           const email = error.email;
           const credential = error.credential;
           console.log('gagal login dengan gamil', error)
+          swal({
+            type: 'error',
+            title: 'Oops...',
+            text: 'log in Fail, please try again!',
+            // footer: '<a href>Why do I have this issue?</a>',
+          })
         });
       },
       Logout() {
